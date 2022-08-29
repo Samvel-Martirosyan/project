@@ -18,3 +18,5 @@ Route::get('/', function () {
 });
 
 Route::post('/generate', [\App\Http\Controllers\QrController::class, 'QrGenerator']);
+Route::get('/chat', [\App\Http\Controllers\HomeController::class, 'showChat']);
+Route::get('/view-message', [\App\Http\Controllers\HomeController::class, 'viewMessage']);

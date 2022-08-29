@@ -21,9 +21,11 @@
         </style>
     </head>
     <body class="antialiased">
-        <form type="POST" action="/generate">
-            <input type="text" name="name">
-            <button type="submit">Click</button>
-        </form>
+        @yield('content')
     </body>
 </html>
+<script src="{{ asset('assets/plugin/socket.io-client-4.5.0/dist/socket.io.min.js')}}"></script>
+<script>
+    const socket = io("ws://localhost:8082");
+    window.socketIo = socket;
+</script>

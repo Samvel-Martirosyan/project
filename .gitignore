@@ -14,3 +14,5 @@ yarn-error.log
 /.idea
 /.vscode
 resources/img
+socet_io/node_modules
+socet_io/config.js
