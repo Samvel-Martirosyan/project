@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        th {
+            width: 300px;
+            border: 1px solid black;
+            padding: 15px;
+        }
+        td {
+            border: 2px dashed black;
+            text-align: center;
+            padding: 15px;
+        }
+        form {
+            width: 500px;
+        }
+        input {
+            width: 100%;
+            margin-top: 10px;
+        }
+        form button {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <button type="button" @click="getHashtags">Download</button>
+    <ul>
+        <li v-for="item in hashtags">{{ item }}</li>
+    </ul>
+
+    <form @submit.prevent>
+        <input type="text" v-model="name">
+        <input type="text" v-model="email">
+        <button @click="newUser">Save</button>
+    </form>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        <tr v-for="user in users">
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td><button @click="deleteUser(user.id)">Delete</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            hashtags: [],
+            name: '',
+            email: '',
+            id: Date.now(),
+            users: [{id: 1, name: 'samve;', email: 'test'}]
+        },
+        methods: {
+            getHashtags() {
+                axios.get('https://dka-develop.ru/api?type=hashtag').then((res) => {
+                    this.hashtags = res.data;
+                })
+            },
+            newUser() {
+                const user = {
+                    id: Date.now(),
+                    name: this.name,
+                    email: this.email
+                };
+
+                this.users.push(user);
+                this.name = '';
+                this.email = '';
+            },
+            deleteUser(id) {
+                this.users.forEach((el, index) => {
+                    if (el.id === id) {
+                        this.users.splice(index, 1)
+                    }
+                })
+
+            }
+        }
+    });
+</script>
+</body>
+</html>

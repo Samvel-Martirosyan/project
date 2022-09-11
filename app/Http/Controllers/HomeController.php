@@ -14,4 +14,9 @@ class HomeController extends Controller
     {
         return view('viewMessage');
     }
+
+    public function vuePage()
+    {
+        return view('vuePage');
+    }
 }
