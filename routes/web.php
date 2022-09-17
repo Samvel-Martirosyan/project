@@ -21,3 +21,6 @@ Route::post('/generate', [\App\Http\Controllers\QrController::class, 'QrGenerato
 Route::get('/chat', [\App\Http\Controllers\HomeController::class, 'showChat']);
 Route::get('/view-message', [\App\Http\Controllers\HomeController::class, 'viewMessage']);
 Route::get('/vue', [\App\Http\Controllers\HomeController::class, 'vuePage']);
+
+Route::get('image-cropper',[\App\Http\Controllers\ImageController::class, 'index'])->name('image');
+Route::post('image-cropper/upload',[\App\Http\Controllers\ImageController::class, 'upload']);
