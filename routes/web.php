@@ -24,3 +24,6 @@ Route::get('/vue', [\App\Http\Controllers\HomeController::class, 'vuePage']);
 
 Route::get('image-cropper',[\App\Http\Controllers\ImageController::class, 'index'])->name('image');
 Route::post('image-cropper/upload',[\App\Http\Controllers\ImageController::class, 'upload']);
+
+Route::get('users',[\App\Http\Controllers\UserController::class, 'index']);
+Route::post('users-edit',[\App\Http\Controllers\UserController::class, 'edit']);
