@@ -19,4 +19,9 @@ class HomeController extends Controller
     {
         return view('vuePage');
     }
+
+    public function reactShow()
+    {
+        return view('react');
+    }
 }

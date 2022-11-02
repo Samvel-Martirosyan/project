@@ -27,3 +27,5 @@ Route::post('image-cropper/upload',[\App\Http\Controllers\ImageController::class
 
 Route::get('users',[\App\Http\Controllers\UserController::class, 'index']);
 Route::post('users-edit',[\App\Http\Controllers\UserController::class, 'edit']);
+
+Route::get('react',[\App\Http\Controllers\HomeController::class, 'reactShow']);
