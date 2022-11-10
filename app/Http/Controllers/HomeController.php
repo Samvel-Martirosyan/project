@@ -24,4 +24,9 @@ class HomeController extends Controller
     {
         return view('react');
     }
+
+    public function map()
+    {
+        return view('map');
+    }
 }
