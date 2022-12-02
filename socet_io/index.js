@@ -10,13 +10,20 @@ const io = new Server(server, {
     }
 });
 
-const user = {};
+const users = {};
+const messages = {};
 
 io.on('connection', function(socket){
-    user[socket.id] = 1;
+    users[socket.id] = 1;
+
+    socket.on('message', function (data) {
+        Object.assign(messages, data)
+
+        io.sockets.emit('message', data)
+    })
 
     socket.on('disconnect', function(data){
-        delete user[socket.id];
+        delete users[socket.id];
     });
 });
 
