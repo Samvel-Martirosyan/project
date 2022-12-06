@@ -33,7 +33,7 @@ body {
     justify-content: space-between;
     width: 100%;
     max-width: 867px;
-    margin: 25px 10px;
+    margin: 25px 10px 25px 5px;
     height: calc(100% - 50px);
     border: var(--border);
     border-radius: 5px;
@@ -200,4 +200,25 @@ body {
 
 .footer-setting {
     height: 40px;
+}
+
+.online-people {
+    background: #eee;
+    width: 150px;
+    height: calc(100% - 50px);
+    box-shadow: 0 15px 15px -5px rgb(0 0 0 / 20%);
+    padding: 10px;
+}
+
+.online-people div {
+    width: 100%;
+    height: 50px;
+    background-color: #ddd;
+    margin-bottom: 10px;
+}
+
+.online-people div:hover {
+    box-shadow: 0 15px 15px -5px rgb(0 0 0 / 20%);
+    background-color: #b1afaf;
+    cursor: pointer;
 }

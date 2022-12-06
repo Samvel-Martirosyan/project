@@ -2,6 +2,11 @@
 @section('content')
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <div class="online-people">
+
+    </div>
+
     <section class="msger">
         <header class="msger-header">
             <div class="msger-header-title">
@@ -17,7 +22,7 @@
         </main>
 
         <div class="msger-inputarea">
-            <input type="text" class="msger-input" placeholder="Enter your message...">
+            <input type="text" class="msger-input" placeholder="Enter your message..." disabled>
             <button type="button" class="msger-send-btn send-button">Send</button>
         </div>
     </section>
@@ -46,16 +51,41 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/plugin/socket.io-client-4.5.0/dist/socket.io.min.js')}}"></script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         const socket = io("ws://localhost:8082");
         const form = document.querySelector('.msger-inputarea');
-        const message = document.querySelector('.msger-input');
+        const messageInput = document.querySelector('.msger-input');
         const chat = document.querySelector(".msger-chat");
         const button = document.querySelector('.send-button');
         let PERSON_NAME = localStorage.getItem('userName') ?? prompt('What is your name?');
         localStorage.setItem('userName', PERSON_NAME);
 
+        let CHAT_FRIEND_ID = '';
+
+        socket.emit('send-username', PERSON_NAME);
+
+        socket.on('users', function (data) {
+            $('.online-people .div').remove();
+            for (const property in data.users) {
+                if (data.users[property] === PERSON_NAME) {
+                    const el = `<div class="div" data-id="${property}">${data.users[property]} : you</div>`;
+                    $('.online-people').append(el);
+                } else {
+                    const el = `<div class="div" data-id="${property}">${data.users[property]}</div>`;
+                    $('.online-people').append(el);
+                }
+
+                $('.div').click(function () {
+                    CHAT_FRIEND_ID= $(this).attr('data-id');
+                    $('.msger-input').prop('disabled', false)
+                })
+            }
+        })
+
         socket.on('message', function (data) {
+            const socketId = Object.keys(data)[0];
+            data = data[socketId];
             if (! data[PERSON_NAME]) {
                 const personName = Object.keys(data)[0];
                 appendMessage(personName, 'left', data[personName]);
@@ -63,14 +93,16 @@
         })
 
         button.addEventListener('click', function (event) {
-            const myMessage = message.value;
+            const myMessage = messageInput.value;
             if (!myMessage) return;
 
             appendMessage(PERSON_NAME, 'right', myMessage);
-            message.value = "";
+            messageInput.value = "";
 
+            const message = {};
             const messageArr = {};
-            messageArr[PERSON_NAME] = myMessage;
+            message[PERSON_NAME] = myMessage;
+            messageArr[CHAT_FRIEND_ID] = message;
 
             socket.emit('message', messageArr);
         });
@@ -119,5 +151,11 @@
             $('.msger').css('display', 'flex');
             $('.setting').prop('hidden', true);
         })
+
+        $('.msger-input').on('keypress',function(e) {
+            if (e.keyCode === 13) {
+                $(".send-button").click();
+            }
+        });
     </script>
 @endsection

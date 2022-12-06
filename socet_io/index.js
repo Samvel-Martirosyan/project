@@ -14,16 +14,20 @@ const users = {};
 const messages = {};
 
 io.on('connection', function(socket){
-    users[socket.id] = 1;
+    socket.on('send-username', function (data) {
+        users[socket.id] = data;
+        io.sockets.emit('users', { users, userId: socket.id})
+    })
 
     socket.on('message', function (data) {
         Object.assign(messages, data)
 
-        io.sockets.emit('message', data)
+        io.to(Object.keys(data)[0]).emit("message", data)
     })
 
     socket.on('disconnect', function(data){
         delete users[socket.id];
+        io.sockets.emit('users', users)
     });
 });
 
